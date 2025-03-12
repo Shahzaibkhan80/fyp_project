@@ -5,7 +5,7 @@ class AppTextfield extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final bool obscureText;
-  final Icon prefixIcon;
+  final Icon? prefixIcon;
   final Widget? suffixIcon;
   final Color borderColor;
   final double borderRadius;
@@ -16,7 +16,7 @@ class AppTextfield extends StatelessWidget {
       required this.controller,
       this.keyboardType = TextInputType.text,
       this.obscureText = false,
-      required this.prefixIcon,
+      this.prefixIcon,
       this.suffixIcon,
       this.borderColor = Colors.grey,
       this.borderRadius = 8});
@@ -45,14 +45,15 @@ class AppTextfield extends StatelessWidget {
               width: 1,
               child: Row(
                 children: [
-                  prefixIcon,
+                  if (prefixIcon != null) prefixIcon!,
                   SizedBox(
                     width: 5,
                   ),
-                  Container(height: 20, width: 1, color: Colors.grey),
+                  Container(height: 25, width: 1, color: Colors.grey),
                 ],
               ),
             ),
+            // prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
 
             // contentPadding: const EdgeInsets.symmetric(vertical: 15),

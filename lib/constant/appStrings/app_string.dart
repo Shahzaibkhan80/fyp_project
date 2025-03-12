@@ -37,5 +37,6 @@ class Appstrings {
   static const String authRegisterAge = "Age";
   static const String authRegisterButton = "Register";
   static const String authRegisterAlreadyHaveText = "Already have an account?";
-  static const String authRegisterLoginText = "Log In";
+  static const String authLoginButton = "Log In";
+  static const String authRegisterGenderText = "Gender";
 }
