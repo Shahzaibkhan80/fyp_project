@@ -8,8 +8,9 @@ import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
 import 'package:fyp_project/navigationScreen/appNavigation.dart';
 import 'package:fyp_project/routings/routeName/routes_name.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
-import 'package:fyp_project/widgets/customImage/custom_image.dart';
 import 'package:provider/provider.dart';
+
+import '../../../view_modal/provider/textController/text_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -29,21 +30,21 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 80,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CustomImage(
-                        imageUrl: 'assets/images/doctor.png',
-                        title: 'Doctor',
-                        imagewidth: 100,
-                      ),
-                      CustomImage(
-                        imageUrl: 'assets/images/patient.jpg',
-                        title: 'Patient',
-                        imagewidth: 100,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     CustomImage(
+                  //       imageUrl: 'assets/images/doctor.png',
+                  //       title: 'Doctor',
+                  //       imagewidth: 100,
+                  //     ),
+                  //     CustomImage(
+                  //       imageUrl: 'assets/images/patient.jpg',
+                  //       title: 'Patient',
+                  //       imagewidth: 100,
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(
                     height: 40,
                   ),
@@ -52,15 +53,18 @@ class LoginScreen extends StatelessWidget {
                     child: AppText(
                       title: Appstrings.authloginText,
                       color: AppColors.blackTextClr,
-                      fontSize: 20,
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   AppTextfield(
-                    labelText: Appstrings.authEmail,
-                    controller: login.loginemailController,
+                    hintText: Appstrings.authEmail,
+                    controller: TextController.loginemailController,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: AppIcons.customIcon(Icons.email),
                   ),
@@ -68,11 +72,18 @@ class LoginScreen extends StatelessWidget {
                     height: 10,
                   ),
                   AppTextfield(
-                    controller: login.loginpassController,
-                    suffixIcon: AppIcons.suffixIconOff,
-                    obscureText: true,
-                    labelText: 'Password',
+                    controller: TextController.loginpassController,
+                    obscureText: login.isvisible,
+                    hintText: 'Password',
                     prefixIcon: AppIcons.customIcon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        login.iconToggle();
+                      },
+                      icon: login.isvisible
+                          ? AppIcons.customIcon(Icons.visibility_off)
+                          : AppIcons.customIcon(Icons.visibility),
+                    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -81,6 +92,10 @@ class LoginScreen extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: AppText(
                       title: Appstrings.authForgotPassword,
+                      ontap: () {
+                        AppNavigators.nextscreen(
+                            context, RouteName.forgotscreen);
+                      },
                       color: AppColors.blackTextClr,
                     ),
                   ),

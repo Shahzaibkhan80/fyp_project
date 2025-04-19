@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_project/view/auth/forgotScreen/forgot_screen.dart';
 import '../../view/auth/loginScreen/login_screen.dart';
 import '../../view/auth/registerScreen/register_screen.dart';
 import '../../view/splashScreen/splash_screen.dart';
@@ -10,6 +11,7 @@ class RouteScreen {
       RouteName.splashscreen: (context) => SplashScreen(),
       RouteName.loginscreen: (context) => LoginScreen(),
       RouteName.regscreen: (context) => RegisterScreen(),
+      RouteName.forgotscreen: (context) => ForgotScreen(),
     };
   }
 }

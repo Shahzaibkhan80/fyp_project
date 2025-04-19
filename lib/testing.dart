@@ -27,7 +27,7 @@ class Testing extends StatelessWidget {
               height: 10,
             ),
             AppTextfield(
-              labelText: "Email",
+              hintText: "Email",
               controller: check,
               prefixIcon: AppIcons.customIcon(Icons.mail),
             ),

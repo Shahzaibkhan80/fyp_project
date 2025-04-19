@@ -19,13 +19,8 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   //Login Screen
-  TextEditingController loginemailController = TextEditingController();
-  TextEditingController loginpassController = TextEditingController();
 
   //Register Screen
-  TextEditingController regnameController = TextEditingController();
-  TextEditingController regContactNoController = TextEditingController();
-  TextEditingController regAgeController = TextEditingController();
 
   //Select Gender
   // String? selectgender;
@@ -35,5 +30,10 @@ class GeneralProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  TextEditingController genderController = TextEditingController();
+  //textfield visibility
+  bool isvisible = true;
+  void iconToggle() {
+    isvisible = !isvisible;
+    notifyListeners();
+  }
 }
