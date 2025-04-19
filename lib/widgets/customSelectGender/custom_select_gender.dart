@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appStrings/app_string.dart';
 import 'package:fyp_project/constant/appText/app_text.dart';
+import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../constant/appColors/app_color.dart';
 
@@ -9,6 +11,7 @@ class CustomSelectGender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gender = Provider.of<GeneralProvider>(context);
     return Column(
       children: [
         Align(
@@ -40,6 +43,12 @@ class CustomSelectGender extends StatelessWidget {
               value: gender,
             );
           }).toList(),
+          onSelected: (value) {
+            if (value != null) {
+              gender.selectgender = value;
+              print('Gender selected: $value');
+            }
+          },
         )
       ],
     );

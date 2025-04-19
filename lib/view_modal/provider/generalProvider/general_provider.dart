@@ -23,12 +23,12 @@ class GeneralProvider extends ChangeNotifier {
   //Register Screen
 
   //Select Gender
-  // String? selectgender;
+  String? selectgender;
 
-  // void setGender(String gender) {
-  //   selectgender = gender;
-  //   notifyListeners();
-  // }
+  void setGender(String gender) {
+    selectgender = gender;
+    notifyListeners();
+  }
 
   //textfield visibility
   bool isvisible = true;

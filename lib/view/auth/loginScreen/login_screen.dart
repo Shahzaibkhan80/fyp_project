@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_project/constant/appAuth/appauth.dart';
 import 'package:fyp_project/constant/appButton/app_button.dart';
 import 'package:fyp_project/constant/appColors/app_color.dart';
 import 'package:fyp_project/constant/appIcons/app_icon.dart';
@@ -105,7 +106,9 @@ class LoginScreen extends StatelessWidget {
                   AppButton(
                     btnText: Appstrings.authLoginButton,
                     color: AppColors.textbuttoncolor,
-                    ontap: () {},
+                    ontap: () {
+                      AppAuth(context).login();
+                    },
                   ),
                   SizedBox(
                     height: 10,

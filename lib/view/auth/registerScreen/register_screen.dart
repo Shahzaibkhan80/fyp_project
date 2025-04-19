@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appIcons/app_icon.dart';
 import 'package:fyp_project/constant/appImages/app_image.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
+import 'package:fyp_project/view/auth/authServices/authservices.dart';
 import 'package:fyp_project/view_modal/provider/textController/text_controller.dart';
 import 'package:fyp_project/widgets/customImage/custom_image.dart';
 import 'package:provider/provider.dart';
+import '../../../constant/appAuth/appauth.dart';
 import '../../../constant/appButton/app_button.dart';
 import '../../../constant/appColors/app_color.dart';
 import '../../../constant/appStrings/app_string.dart';
@@ -54,13 +56,13 @@ class RegisterScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     AppTextfield(
                       hintText: Appstrings.authEmail,
-                      controller: TextController.loginemailController,
+                      controller: TextController.regemailController,
                       prefixIcon: AppIcons.customIcon(Icons.email),
                     ),
                     SizedBox(height: 10),
                     AppTextfield(
                       hintText: Appstrings.authPassword,
-                      controller: TextController.loginpassController,
+                      controller: TextController.regpassController,
                       obscureText: true,
                       prefixIcon: AppIcons.customIcon(Icons.lock_open_rounded),
                     ),
@@ -83,10 +85,11 @@ class RegisterScreen extends StatelessWidget {
                       height: 30,
                     ),
                     AppButton(
-                      btnText: Appstrings.authRegisterButton,
-                      color: AppColors.textbuttoncolor,
-                      ontap: () {},
-                    ),
+                        btnText: Appstrings.authRegisterButton,
+                        color: AppColors.textbuttoncolor,
+                        ontap: () {
+                          AppAuth(context).register();
+                        }),
                   ],
                 ),
               ),
