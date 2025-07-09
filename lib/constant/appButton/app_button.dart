@@ -16,6 +16,7 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
+      elevation: 2,
       child: InkWell(
         onTap: ontap,
         child: Container(

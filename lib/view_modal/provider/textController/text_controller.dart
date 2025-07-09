@@ -11,4 +11,8 @@ class TextController {
   static TextEditingController genderController = TextEditingController();
   static TextEditingController regemailController = TextEditingController();
   static TextEditingController regpassController = TextEditingController();
+
+  //confirm Screen
+  static TextEditingController confirmController = TextEditingController();
+  static TextEditingController confirmnewController = TextEditingController();
 }

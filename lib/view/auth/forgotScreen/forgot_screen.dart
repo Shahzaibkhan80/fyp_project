@@ -4,6 +4,8 @@ import 'package:fyp_project/constant/appImages/app_image.dart';
 import 'package:fyp_project/constant/appStrings/app_string.dart';
 import 'package:fyp_project/constant/appText/app_text.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
+import 'package:fyp_project/navigationScreen/appNavigation.dart';
+import 'package:fyp_project/routings/routeName/routes_name.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 import 'package:fyp_project/widgets/customImage/custom_image.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +62,9 @@ class ForgotScreen extends StatelessWidget {
                     SizedBox(height: 80),
                     AppButton(
                       btnText: Appstrings.authForgorSendButton,
-                      ontap: () {},
+                      ontap: () {
+                        AppNavigators.nextscreen(context, RouteName.otpscreen);
+                      },
                       color: AppColors.textbuttoncolor,
                     )
                   ],

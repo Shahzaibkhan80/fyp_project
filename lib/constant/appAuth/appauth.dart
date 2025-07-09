@@ -12,7 +12,7 @@ class AppAuth {
 
   AppAuth(this.context);
 
-  void register() {
+  Future<bool> register() async {
     final reg = Provider.of<GeneralProvider>(context, listen: false);
     final name = TextController.regnameController.text.trim();
     final email = TextController.regemailController.text.trim();
@@ -30,37 +30,37 @@ class AppAuth {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please fill all the fields")),
       );
-      return;
+      return false;
     }
 
     final authregService = Authservices();
 
-    authregService
-        .registerUser(
+    final error = await authregService.registerUser(
       name: name,
       email: email,
       password: pass,
       contactNo: contactNo,
       age: age,
       gender: gender,
-    )
-        .then((error) {
-      if (error == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Registration successful")),
-        );
-        TextController.regnameController.clear();
-        TextController.regemailController.clear();
-        TextController.regpassController.clear();
-        TextController.regContactNoController.clear();
-        TextController.regAgeController.clear();
-        reg.selectgender = null;
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
-      }
-    });
+    );
+
+    if (error == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Registration successful")),
+      );
+      TextController.regnameController.clear();
+      TextController.regemailController.clear();
+      TextController.regpassController.clear();
+      TextController.regContactNoController.clear();
+      TextController.regAgeController.clear();
+      reg.selectgender = null;
+      return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error)),
+      );
+      return false;
+    }
   }
 
   void login() {

@@ -39,4 +39,13 @@ class Appstrings {
   static const String authRegisterAlreadyHaveText = "Already have an account?";
   static const String authLoginButton = "Log In";
   static const String authRegisterGenderText = "Gender";
+
+  /// Validation Strings
+  static const String vEnterName = "Please enter your name";
+  static const String vEmailRequired = "Please enter your email address";
+  static const String validEmail = "Please enter a valid email address";
+  static const String passwordRequired = "Please enter your password";
+  static const String passwordmust =
+      "Password must be at least 6 characters long";
+  static const String genderSelect = "Please select a gender";
 }

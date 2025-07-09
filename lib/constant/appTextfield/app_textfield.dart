@@ -9,6 +9,7 @@ class AppTextfield extends StatelessWidget {
   final Widget? suffixIcon;
   final Color borderColor;
   final double borderRadius;
+  final FormFieldValidator<String>? validator;
 
   const AppTextfield({
     super.key,
@@ -20,6 +21,7 @@ class AppTextfield extends StatelessWidget {
     this.suffixIcon,
     this.borderColor = Colors.grey,
     this.borderRadius = 8.0,
+    this.validator,
   });
 
   @override

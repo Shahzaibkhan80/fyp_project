@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_project/view/auth/forgotScreen/forgot_screen.dart';
+import 'package:fyp_project/view/auth/otpScreen/otpscreen.dart';
+import '../../view/auth/confirmPasswordScreen/confirmpasswordscreen.dart';
 import '../../view/auth/loginScreen/login_screen.dart';
 import '../../view/auth/registerScreen/register_screen.dart';
 import '../../view/dashboard/uploadImage/upload_image.dart';
@@ -14,6 +16,8 @@ class RouteScreen {
       RouteName.regscreen: (context) => RegisterScreen(),
       RouteName.forgotscreen: (context) => ForgotScreen(),
       RouteName.uploadimage: (context) => UploadImage(),
+      RouteName.otpscreen: (context) => Otpscreen(),
+      RouteName.confirmpasswordscreen: (context) => Confirmpasswordscreen(),
     };
   }
 }
