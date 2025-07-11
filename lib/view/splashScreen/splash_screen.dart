@@ -14,20 +14,35 @@ class SplashScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: CustomImage(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomImage(
               imageUrl: AppImage.projectlogo,
-              imageheight: screenHeight * 0.9,
-              imagewidth: screenWidth * 0.9,
+              imageheight: screenHeight * 0.22,
+              imagewidth: screenWidth * 0.45,
             ),
-          ),
-          const CircularProgressIndicator(
-            color: AppColors.textbuttoncolor,
-          ),
-        ],
+            const SizedBox(height: 32),
+            const CircularProgressIndicator(
+              color: AppColors.textbuttoncolor,
+              strokeWidth: 3,
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Loading...",
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 18,
+                letterSpacing: 1.1,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

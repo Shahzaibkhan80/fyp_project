@@ -14,7 +14,7 @@ class GeneralProvider extends ChangeNotifier {
   // }
   void setLoading(BuildContext context) {
     Future.delayed(Duration(seconds: 3), () {
-      AppNavigators.changescreen(context, '/LoginScreen');
+      AppNavigators.changescreen(context, '/RegisterScreen');
     });
   }
 

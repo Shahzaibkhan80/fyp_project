@@ -15,4 +15,7 @@ class TextController {
   //confirm Screen
   static TextEditingController confirmController = TextEditingController();
   static TextEditingController confirmnewController = TextEditingController();
+
+  //forgot Screen
+  static TextEditingController forgotemailController = TextEditingController();
 }

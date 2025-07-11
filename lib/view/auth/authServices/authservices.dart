@@ -47,4 +47,14 @@ class Authservices {
       return e.toString();
     }
   }
+
+  Future<String?> sendPasswordResetEmail({required String email}) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      return null;
+    } catch (e) {
+      print('Error: $e');
+      return e.toString();
+    }
+  }
 }
