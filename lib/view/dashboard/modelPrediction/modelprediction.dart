@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 
+import '../../../models/view_report_model.dart';
+import '../veiwReport/viewReport.dart';
+
 class Modelprediction extends StatelessWidget {
   final String predictionResult;
   const Modelprediction(
@@ -19,8 +22,8 @@ class Modelprediction extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF1565C0),
-                  Color(0xFF42A5F5),
+                  Color.fromARGB(255, 141, 176, 216),
+                  Color.fromARGB(255, 118, 167, 231),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -128,6 +131,62 @@ class Modelprediction extends StatelessWidget {
                                   onPressed: () {
                                     provider.generatePdf(
                                         context, predictionResult);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Consumer<GeneralProvider>(
+                              builder: (context, provider, child) {
+                                return ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange.shade600,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    elevation: 4,
+                                  ),
+                                  icon: const Icon(Icons.receipt_long),
+                                  label: const Text(
+                                    "View Report",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onPressed: () async {
+                                    final userData =
+                                        await provider.fetchUserData();
+                                    if (userData != null) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Viewreport(
+                                            report: ViewReportModel(
+                                              name: userData['name'] ?? '',
+                                              email: userData['email'] ?? '',
+                                              phone:
+                                                  userData['contactNo'] ?? '',
+                                              age: userData['age'] ?? '',
+                                              gender: userData['gender'] ?? '',
+                                              prediction: predictionResult,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('User data not found!')),
+                                      );
+                                    }
                                   },
                                 );
                               },

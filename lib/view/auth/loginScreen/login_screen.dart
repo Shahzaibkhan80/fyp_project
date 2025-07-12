@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
           onWillPop: () async {
             TextController.loginemailController.clear();
             TextController.loginpassController.clear();
-            return true; // allow pop
+            return true;
           },
           child: Consumer<GeneralProvider>(
             builder: (context, login, child) {
@@ -38,8 +38,8 @@ class LoginScreen extends StatelessWidget {
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color(0xFF1565C0),
-                          Color(0xFF42A5F5),
+                          Color.fromARGB(255, 141, 176, 216),
+                          Color.fromARGB(255, 118, 167, 231),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -49,38 +49,16 @@ class LoginScreen extends StatelessWidget {
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        const SizedBox(height: 80),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 24, bottom: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Welcome",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 34,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.2,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  Appstrings.authloginText,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        const SizedBox(height: 60),
+                        // Logo above container
+                        Center(
+                          child: Image.asset(
+                            'assets/images/project_logo.png', // Apne logo ka sahi path dein
+                            height: 130,
+                            width: 130,
                           ),
                         ),
+                        const SizedBox(height: 18),
                         Container(
                           width: double.infinity,
                           height: height * 0.76,
@@ -103,12 +81,31 @@ class LoginScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Heading and subheading inside container
+                              const Text(
+                                "Welcome",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                Appstrings.authloginText,
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 24,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 30),
                               Form(
                                 key: formkey,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 30),
                                     AppTextfield(
                                       hintText: Appstrings.authEmail,
                                       controller:

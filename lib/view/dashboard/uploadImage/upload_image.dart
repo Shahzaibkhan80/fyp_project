@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 
 import '../modelPrediction/modelprediction.dart';
+import '../veiwReport/viewReport.dart';
 
 class UploadImage extends StatelessWidget {
   const UploadImage({super.key});
@@ -20,8 +21,8 @@ class UploadImage extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF1565C0),
-                  Color(0xFF42A5F5),
+                  Color.fromARGB(255, 141, 176, 216),
+                  Color.fromARGB(255, 118, 167, 231),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -87,66 +88,69 @@ class UploadImage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // File input row
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Text(
                                   "File input",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 17,
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue.shade600,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 18, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                icon: const Icon(Icons.file_upload),
-                                onPressed: () {
-                                  provider.pickImage();
-                                },
-                                label: const Text("Choose File"),
-                              ),
-                              const SizedBox(width: 16),
-                              SizedBox(
-                                width: 120,
-                                child: ElevatedButton(
+                                const SizedBox(width: 16),
+                                ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green.shade600,
+                                    backgroundColor: Colors.blue.shade600,
                                     foregroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
+                                        horizontal: 18, vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  onPressed: provider.selectedImage != null
-                                      ? () async {
-                                          await provider.uploadImage(context);
-                                          String result = await provider
-                                              .predictImage(context);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Modelprediction(
-                                                      predictionResult: result),
-                                            ),
-                                          );
-                                        }
-                                      : null,
-                                  child: const Text("Upload"),
+                                  icon: const Icon(Icons.file_upload),
+                                  onPressed: () {
+                                    provider.pickImage();
+                                  },
+                                  label: const Text("Choose File"),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 16),
+                                SizedBox(
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green.shade600,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: provider.selectedImage != null
+                                        ? () async {
+                                            await provider.uploadImage(context);
+                                            String result = await provider
+                                                .predictImage(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Modelprediction(
+                                                        predictionResult:
+                                                            result),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                    child: const Text("Upload"),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 10),
                           // File name and info

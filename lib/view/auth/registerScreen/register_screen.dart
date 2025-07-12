@@ -33,8 +33,8 @@ class RegisterScreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xFF1565C0),
-                        Color(0xFF42A5F5),
+                        Color.fromARGB(255, 141, 176, 216),
+                        Color.fromARGB(255, 118, 167, 231),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

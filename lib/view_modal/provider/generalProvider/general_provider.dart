@@ -12,6 +12,8 @@ import 'package:image/image.dart' as img; // <-- Only this for image ops
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GeneralProvider extends ChangeNotifier {
   // Splash Screen Working
@@ -171,5 +173,15 @@ class GeneralProvider extends ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('PDF Report saved: ${file.path}')),
     );
+  }
+
+  Future<Map<String, dynamic>?> fetchUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    return doc.data();
   }
 }

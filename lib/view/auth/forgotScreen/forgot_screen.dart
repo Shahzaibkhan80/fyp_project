@@ -33,8 +33,8 @@ class ForgotScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFFE3F0FF), // Light blue/grey
-                    Color(0xFFF8FBFF), // Almost white
+                    Color.fromARGB(255, 141, 176, 216),
+                    Color.fromARGB(255, 118, 167, 231),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
