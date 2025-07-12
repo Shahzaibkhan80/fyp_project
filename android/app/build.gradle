@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.fyp_project"
+    namespace 'com.example.fyp_project'
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

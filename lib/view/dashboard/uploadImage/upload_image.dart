@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 
+import '../modelPrediction/modelprediction.dart';
+
 class UploadImage extends StatelessWidget {
   const UploadImage({super.key});
 
@@ -127,7 +129,19 @@ class UploadImage extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: provider.selectedImage != null
-                                      ? () => provider.uploadImage(context)
+                                      ? () async {
+                                          await provider.uploadImage(context);
+                                          String result = await provider
+                                              .predictImage(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Modelprediction(
+                                                      predictionResult: result),
+                                            ),
+                                          );
+                                        }
                                       : null,
                                   child: const Text("Upload"),
                                 ),
