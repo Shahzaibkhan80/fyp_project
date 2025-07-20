@@ -11,15 +11,15 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img; // <-- Only this for image ops
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/pdf.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:open_file/open_file.dart';
 
 class GeneralProvider extends ChangeNotifier {
   // Splash Screen Working
   void setLoading(BuildContext context) {
     Future.delayed(Duration(seconds: 3), () {
-      AppNavigators.changescreen(context, '/RegisterScreen');
+      Navigator.pushReplacementNamed(context, '/RegisterScreen');
     });
   }
 
@@ -171,7 +171,15 @@ class GeneralProvider extends ChangeNotifier {
     await file.writeAsBytes(await pdf.save());
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('PDF Report saved: ${file.path}')),
+      SnackBar(
+        content: Text('PDF Report saved: ${file.path}'),
+        action: SnackBarAction(
+          label: 'Open',
+          onPressed: () {
+            OpenFile.open(file.path);
+          },
+        ),
+      ),
     );
   }
 

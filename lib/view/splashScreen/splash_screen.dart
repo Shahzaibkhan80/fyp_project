@@ -10,7 +10,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<GeneralProvider>(context, listen: true).setLoading(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<GeneralProvider>(context, listen: false).setLoading(context);
+    });
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(

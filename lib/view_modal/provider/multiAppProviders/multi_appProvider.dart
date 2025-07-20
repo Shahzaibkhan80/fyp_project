@@ -4,4 +4,5 @@ import 'package:provider/provider.dart';
 
 final multiAppProviders = [
   ChangeNotifierProvider(create: (_) => GeneralProvider()),
+  // ChangeNotifierProvider(create: (_) => ReportProvider()),
 ];
