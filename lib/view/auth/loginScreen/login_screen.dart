@@ -6,11 +6,13 @@ import 'package:fyp_project/constant/appStrings/app_string.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
 import 'package:fyp_project/navigationScreen/appNavigation.dart';
 import 'package:fyp_project/routings/routeName/routes_name.dart';
+import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 import 'package:fyp_project/view_modal/validation/validation.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/appButton/app_button.dart';
+import '../../../constant/appImages/app_image.dart';
 import '../../../view_modal/provider/textController/text_controller.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -22,6 +24,7 @@ class LoginScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
+        // AppBar se theme toggle button hata diya
         backgroundColor: Colors.transparent,
         body: WillPopScope(
           onWillPop: () async {
@@ -53,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                         // Logo above container
                         Center(
                           child: Image.asset(
-                            'assets/images/project_logo.png', // Apne logo ka sahi path dein
+                            AppImage.projectlogo,
                             height: 130,
                             width: 130,
                           ),
@@ -82,20 +85,18 @@ class LoginScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Heading and subheading inside container
-                              const Text(
+                              Text(
                                 "Welcome",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 Appstrings.authloginText,
-                                style: const TextStyle(
-                                  color: Colors.black54,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color, // Theme color use karein
                                   fontSize: 24,
                                   letterSpacing: 0.5,
                                 ),
@@ -156,13 +157,26 @@ class LoginScreen extends StatelessWidget {
                                       ],
                                     ),
                                     const SizedBox(height: 24),
-                                    // Gradient Button
+                                    // Gradient Button with CustomFlushBar
                                     AppButton(
                                       btnText: Appstrings.authLoginButton,
                                       color: const Color(0xFF1565C0),
                                       ontap: () {
                                         if (formkey.currentState!.validate()) {
-                                          AppAuth(context).login();
+                                          try {
+                                            AppAuth(context).login();
+                                            // Show success notification
+                                            CustomFlushBar.showSuccess(
+                                                context, "Login successful!");
+                                          } catch (e) {
+                                            // Show error notification
+                                            CustomFlushBar.showError(context,
+                                                "Login failed: ${e.toString()}");
+                                          }
+                                        } else {
+                                          // Show validation error notification
+                                          CustomFlushBar.showInfo(context,
+                                              "Please correct the form errors.");
                                         }
                                       },
                                     ),
@@ -178,7 +192,8 @@ class LoginScreen extends StatelessWidget {
                                     child: Text(
                                       Appstrings.authDontHaveAccount,
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Theme.of(context)
+                                            .hintColor, // Colors.grey ki jagah
                                         fontSize: 15,
                                       ),
                                     ),
@@ -207,6 +222,19 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  // Floating theme toggle button at bottom right
+                  Positioned(
+                    bottom: 24,
+                    left: 24,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.blue,
+                      child: Icon(Icons.brightness_6, color: Colors.white),
+                      onPressed: () {
+                        Provider.of<GeneralProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
                     ),
                   ),
                 ],

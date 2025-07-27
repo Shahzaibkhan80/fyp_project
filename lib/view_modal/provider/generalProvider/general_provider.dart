@@ -192,4 +192,12 @@ class GeneralProvider extends ChangeNotifier {
         .get();
     return doc.data();
   }
+
+  //theme mode
+  ThemeMode themeMode = ThemeMode.light;
+
+  void toggleTheme() {
+    themeMode = themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
 }

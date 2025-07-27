@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appIcons/app_icon.dart';
 import 'package:fyp_project/constant/appImages/app_image.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
+import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart'; // Import FlushBar
 import 'package:fyp_project/view_modal/provider/textController/text_controller.dart';
 import 'package:fyp_project/view_modal/validation/validation.dart';
 import 'package:fyp_project/widgets/customImage/custom_image.dart';
@@ -90,7 +91,12 @@ class RegisterScreen extends StatelessWidget {
                                 hintText: Appstrings.authRegisterName,
                                 controller: TextController.regnameController,
                                 prefixIcon: AppIcons.customIcon(Icons.person),
-                                suffixIcon: AppIcons.customIcon(Icons.close),
+                                suffixIcon: IconButton(
+                                  icon: AppIcons.customIcon(Icons.close),
+                                  onPressed: () {
+                                    TextController.regnameController.clear();
+                                  },
+                                ),
                                 validator: Validators.validateName,
                               ),
                               const SizedBox(height: 18),
@@ -98,6 +104,7 @@ class RegisterScreen extends StatelessWidget {
                                 hintText: Appstrings.authEmail,
                                 controller: TextController.regemailController,
                                 prefixIcon: AppIcons.customIcon(Icons.email),
+                                validator: Validators.validateEmail,
                               ),
                               const SizedBox(height: 18),
                               AppTextfield(
@@ -114,6 +121,7 @@ class RegisterScreen extends StatelessWidget {
                                           Icons.visibility_off)
                                       : AppIcons.customIcon(Icons.visibility),
                                 ),
+                                validator: Validators.validatePassword,
                               ),
                               const SizedBox(height: 18),
                               AppTextfield(
@@ -122,12 +130,16 @@ class RegisterScreen extends StatelessWidget {
                                     TextController.regContactNoController,
                                 prefixIcon: AppIcons.customIcon(
                                     Icons.contact_page_outlined),
+                                validator: Validators.validateContact,
+                                keyboardType: TextInputType.phone,
                               ),
                               const SizedBox(height: 18),
                               AppTextfield(
                                 hintText: Appstrings.authRegisterAge,
                                 controller: TextController.regAgeController,
                                 prefixIcon: AppIcons.customIcon(Icons.numbers),
+                                validator: Validators.validateAge,
+                                keyboardType: TextInputType.number,
                               ),
                               const SizedBox(height: 18),
                               CustomSelectGender(),
@@ -136,11 +148,28 @@ class RegisterScreen extends StatelessWidget {
                                 btnText: Appstrings.authRegisterButton,
                                 color: AppColors.textbuttoncolor,
                                 ontap: () async {
-                                  bool isRegistered =
+                                  // Validate form first
+                                  if (formkey.currentState!.validate()) {
+                                    // Validate gender selection separately
+                                    if (reg.selectgender == null ||
+                                        reg.selectgender!.isEmpty) {
+                                      CustomFlushBar.showInfo(
+                                          context, "Please select your gender");
+                                      return;
+                                    }
+
+                                    try {
+                                      // Call register method - AppAuth will handle FlushBar and navigation
                                       await AppAuth(context).register();
-                                  if (isRegistered && context.mounted) {
-                                    AppNavigators.changescreen(
-                                        context, RouteName.uploadimage);
+                                    } catch (e) {
+                                      // Only handle exceptions that AppAuth didn't catch
+                                      CustomFlushBar.showError(
+                                          context, "Error: ${e.toString()}");
+                                    }
+                                  } else {
+                                    // Form validation failed
+                                    CustomFlushBar.showInfo(context,
+                                        "Please correct the errors in the form");
                                   }
                                 },
                               ),

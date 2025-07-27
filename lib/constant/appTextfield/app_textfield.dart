@@ -10,6 +10,8 @@ class AppTextfield extends StatelessWidget {
   final Color borderColor;
   final double borderRadius;
   final FormFieldValidator<String>? validator;
+  final Function(String)? onChanged;
+  final String? errorText;
 
   const AppTextfield({
     super.key,
@@ -22,35 +24,58 @@ class AppTextfield extends StatelessWidget {
     this.borderColor = Colors.grey,
     this.borderRadius = 8.0,
     this.validator,
+    this.onChanged,
+    this.errorText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      style: const TextStyle(color: Colors.blue, fontSize: 14),
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: borderColor),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          validator: validator,
+          onChanged: onChanged,
+          style: const TextStyle(color: Colors.blue, fontSize: 14),
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide: BorderSide(color: borderColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide: BorderSide(color: Colors.blue, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            // Hide default error text if we're using custom error display
+            errorStyle: errorText != null ? const TextStyle(height: 0) : null,
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: Colors.blue, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: Colors.red, width: 1),
-        ),
-      ),
+        // Show custom error message if provided
+        if (errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 8, top: 4),
+            child: Text(
+              errorText!,
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 12,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

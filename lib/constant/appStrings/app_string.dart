@@ -48,4 +48,15 @@ class Appstrings {
   static const String passwordmust =
       "Password must be at least 6 characters long";
   static const String genderSelect = "Please select a gender";
+
+  // Password validation messages
+  static const String passwordLength = 'Password must be at least 8 characters';
+  static const String passwordUppercase =
+      'Password must contain at least one uppercase letter';
+  static const String passwordLowercase =
+      'Password must contain at least one lowercase letter';
+  static const String passwordNumber =
+      'Password must contain at least one number';
+  static const String passwordSpecial =
+      'Password must contain at least one special character';
 }
