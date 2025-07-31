@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget infoRow(String label, String value) {
+Widget infoRow(BuildContext context, String label, String value) {
+  final Color textColor =
+      Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 7),
     child: Row(
@@ -9,19 +11,19 @@ Widget infoRow(String label, String value) {
           width: 90,
           child: Text(
             "$label:",
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 17,
-              color: Colors.black87,
+              color: textColor,
             ),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
-              color: Colors.black87,
+              color: textColor,
             ),
           ),
         ),

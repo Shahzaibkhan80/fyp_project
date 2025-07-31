@@ -60,7 +60,8 @@ class RegisterScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 32),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color:
+                              Theme.of(context).cardColor, // Theme based color
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(36),
                             topRight: Radius.circular(36),
@@ -80,10 +81,14 @@ class RegisterScreen extends StatelessWidget {
                             children: [
                               Text(
                                 Appstrings.authRegisterAsPatientText,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
-                                  color: Colors.black87,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.color ??
+                                      Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -174,35 +179,32 @@ class RegisterScreen extends StatelessWidget {
                                 },
                               ),
                               const SizedBox(height: 20),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      Appstrings.authRegisterAlreadyHaveText,
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.grey),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  Appstrings.authRegisterAlreadyHaveText,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  AppNavigators.changescreen(
+                                      context, RouteName.loginscreen);
+                                },
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    Appstrings.authLoginButton,
+                                    style: const TextStyle(
+                                      color: Color(0xFF1565C0),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      AppNavigators.changescreen(
-                                          context, RouteName.loginscreen);
-                                    },
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        Appstrings.authLoginButton,
-                                        style: const TextStyle(
-                                          color: Color(0xFF1565C0),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ],
                           ),

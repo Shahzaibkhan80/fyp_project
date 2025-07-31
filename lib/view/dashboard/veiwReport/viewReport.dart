@@ -9,6 +9,12 @@ class Viewreport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color predictionBg = isDark
+        ? Theme.of(context).colorScheme.surface.withOpacity(0.7)
+        : Colors.green.shade50;
+    final Color predictionText = isDark ? Colors.greenAccent : Colors.green;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -38,20 +44,23 @@ class Viewreport extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 22),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.assignment_turned_in_rounded,
-                                color: Colors.blue.shade700, size: 36),
+                            Icon(
+                              Icons.assignment_turned_in_rounded,
+                              color: predictionText, // Green/dark green
+                              size: 36,
+                            ),
                             const SizedBox(width: 10),
-                            const Text(
+                            Text(
                               "Medical Prediction Report",
                               style: TextStyle(
-                                color: Color(0xFF1565C0),
+                                color: predictionText, // Green/dark green
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1,
@@ -70,6 +79,7 @@ class Viewreport extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28),
                       ),
+                      color: Theme.of(context).cardColor,
                       child: Padding(
                         padding: const EdgeInsets.all(28),
                         child: Column(
@@ -78,38 +88,41 @@ class Viewreport extends StatelessWidget {
                             // Section: Patient Info
                             Row(
                               children: [
-                                Icon(Icons.person,
-                                    color: Colors.blue.shade400, size: 28),
+                                Icon(
+                                  Icons.person,
+                                  color: predictionText, // Green/dark green
+                                  size: 28,
+                                ),
                                 const SizedBox(width: 10),
-                                const Text(
+                                Text(
                                   "Patient Information",
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1565C0),
+                                    color: predictionText, // Green/dark green
                                   ),
                                 ),
                               ],
                             ),
                             const Divider(height: 28, thickness: 1.2),
-                            infoRow("Name", report.name),
-                            infoRow("Email", report.email),
-                            infoRow("Phone", report.phone),
-                            infoRow("Age", report.age),
-                            infoRow("Gender", report.gender),
+                            infoRow(context, "Name", report.name),
+                            infoRow(context, "Email", report.email),
+                            infoRow(context, "Phone", report.phone),
+                            infoRow(context, "Age", report.age),
+                            infoRow(context, "Gender", report.gender),
                             const SizedBox(height: 28),
                             // Section: Prediction
                             Row(
                               children: [
                                 Icon(Icons.analytics,
-                                    color: Colors.green.shade600, size: 28),
+                                    color: predictionText, size: 28),
                                 const SizedBox(width: 10),
-                                const Text(
+                                Text(
                                   "Prediction Result",
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.green,
+                                    color: predictionText,
                                   ),
                                 ),
                               ],
@@ -119,16 +132,15 @@ class Viewreport extends StatelessWidget {
                               width: double.infinity,
                               padding: const EdgeInsets.all(18),
                               decoration: BoxDecoration(
-                                color: Colors.green.shade50,
+                                color: predictionBg,
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
-                                  color: Colors.green.shade200,
+                                  color: predictionText.withOpacity(0.5),
                                   width: 1.2,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color:
-                                        Colors.green.shade100.withOpacity(0.2),
+                                    color: predictionText.withOpacity(0.15),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
@@ -136,10 +148,10 @@ class Viewreport extends StatelessWidget {
                               ),
                               child: Text(
                                 report.prediction,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1565C0),
+                                  color: predictionText,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -153,7 +165,7 @@ class Viewreport extends StatelessWidget {
                   Text(
                     "Generated by Brain Tumor Detection App",
                     style: TextStyle(
-                      color: Colors.blueGrey.shade700,
+                      color: Theme.of(context).hintColor,
                       fontSize: 14,
                       fontStyle: FontStyle.italic,
                     ),

@@ -24,7 +24,6 @@ class LoginScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        // AppBar se theme toggle button hata diya
         backgroundColor: Colors.transparent,
         body: WillPopScope(
           onWillPop: () async {
@@ -68,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 32),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(36),
                               topRight: Radius.circular(36),

@@ -40,20 +40,21 @@ class UploadImage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Upload Image",
                           style: TextStyle(
-                            color: Colors.white,
+                            color:
+                                Theme.of(context).textTheme.titleLarge?.color,
                             fontSize: 34,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1.2,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
+                        Text(
                           "Select and upload your image for prediction.",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 1,
@@ -69,7 +70,7 @@ class UploadImage extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor, // Colors.white ki jagah
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(36),
                       topRight: Radius.circular(36),
@@ -158,13 +159,19 @@ class UploadImage extends StatelessWidget {
                             provider.selectedImage == null
                                 ? "No file chosen"
                                 : provider.selectedImage!.path.split('/').last,
-                            style: const TextStyle(
-                                fontSize: 13, color: Colors.black54),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                            ),
                           ),
                           const SizedBox(height: 6),
-                          const Text(
+                          Text(
                             "Only image file allowed to upload here.",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).hintColor,
+                            ),
                           ),
                           const SizedBox(height: 24),
                           // Image preview box
@@ -172,17 +179,18 @@ class UploadImage extends StatelessWidget {
                             height: 180,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Colors.grey.shade300,
-                                  style: BorderStyle.solid),
+                                color: Theme.of(context).dividerColor,
+                                style: BorderStyle.solid,
+                              ),
                               borderRadius: BorderRadius.circular(16),
-                              color: Colors.grey[100],
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                             child: provider.selectedImage == null
                                 ? Center(
                                     child: Text(
                                       "Drop Your Image Here",
                                       style: TextStyle(
-                                        color: Colors.grey[400],
+                                        color: Theme.of(context).hintColor,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),
