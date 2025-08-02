@@ -13,12 +13,19 @@ import '../../../constant/appColors/app_color.dart';
 import '../../../constant/appStrings/app_string.dart';
 import '../../../navigationScreen/appNavigation.dart';
 import '../../../routings/routeName/routes_name.dart';
+import '../../../services/automation_email/automate_email.dart';
 import '../../../view_modal/provider/generalProvider/general_provider.dart';
 import '../../../widgets/customSelectGender/custom_select_gender.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final formkey = GlobalKey<FormState>();
-  RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -153,26 +160,40 @@ class RegisterScreen extends StatelessWidget {
                                 btnText: Appstrings.authRegisterButton,
                                 color: AppColors.textbuttoncolor,
                                 ontap: () async {
-                                  // Validate form first
                                   if (formkey.currentState!.validate()) {
-                                    // Validate gender selection separately
                                     if (reg.selectgender == null ||
                                         reg.selectgender!.isEmpty) {
+                                      print('Gender not selected');
                                       CustomFlushBar.showInfo(
                                           context, "Please select your gender");
                                       return;
                                     }
+                                    final email = TextController
+                                        .regemailController.text
+                                        .trim();
+                                    final name = TextController
+                                        .regnameController.text
+                                        .trim();
 
                                     try {
-                                      // Call register method - AppAuth will handle FlushBar and navigation
+                                      // Pehle Firebase registration karo
                                       await AppAuth(context).register();
+
+                                      // Agar yahan tak pohanch gaye, toh registration success hai
+                                      await N8nWebhookService
+                                          .sendRegistrationToWebhook(
+                                        email: email,
+                                        name: name,
+                                      );
+
+                                      print('Webhook called: $email, $name');
                                     } catch (e) {
-                                      // Only handle exceptions that AppAuth didn't catch
+                                      print('Error in try block: $e');
                                       CustomFlushBar.showError(
                                           context, "Error: ${e.toString()}");
                                     }
                                   } else {
-                                    // Form validation failed
+                                    print('Form validation failed');
                                     CustomFlushBar.showInfo(context,
                                         "Please correct the errors in the form");
                                   }

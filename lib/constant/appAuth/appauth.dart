@@ -30,7 +30,7 @@ class AppAuth {
         age.isEmpty ||
         gender == null) {
       CustomFlushBar.showInfo(context, "Please fill all the fields");
-      return false;
+      throw Exception("Please fill all the fields");
     }
 
     final authregService = Authservices();
@@ -53,13 +53,10 @@ class AppAuth {
       TextController.regAgeController.clear();
       reg.selectgender = null;
 
-      // Show success message before returning
       CustomFlushBar.showSuccess(context, "Registration successful!");
 
-      // Wait for FlushBar to be visible
       await Future.delayed(Duration(seconds: 3));
 
-      // Navigate to next screen
       if (context.mounted) {
         AppNavigators.nextscreen(context, RouteName.uploadimage);
       }
@@ -67,7 +64,7 @@ class AppAuth {
       return true;
     } else {
       CustomFlushBar.showError(context, error);
-      return false;
+      throw Exception(error);
     }
   }
 

@@ -49,7 +49,7 @@ dependencies:
   path_provider: ^2.1.2
   open_file: ^3.5.10
   another_flushbar: ^1.12.30
-  
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
