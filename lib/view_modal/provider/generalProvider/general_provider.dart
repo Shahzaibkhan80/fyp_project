@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fyp_project/navigationScreen/appNavigation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img; // <-- Only this for image ops
 import 'package:flutter/services.dart' show rootBundle;
@@ -14,6 +13,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:open_file/open_file.dart';
+
+import '../../../utilis/customFlushbar/customFlashbar.dart';
 
 class GeneralProvider extends ChangeNotifier {
   // Splash Screen Working
@@ -46,7 +47,7 @@ class GeneralProvider extends ChangeNotifier {
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
     if (pickedFile != null) {
       selectedImage = File(pickedFile.path);
-      // Save image path to SharedPreferences
+
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('selected_image_path', pickedFile.path);
       notifyListeners();
@@ -56,10 +57,7 @@ class GeneralProvider extends ChangeNotifier {
   Future<void> uploadImage(BuildContext context) async {
     if (selectedImage == null) return;
     // Yahan apni upload logic lagayen (API call, Firebase, etc.)
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Image uploaded!')),
-    );
-    // notifyListeners(); // Agar UI update karna ho
+    CustomFlushBar.showSuccess(context, 'Image uploaded!');
   }
 
   Interpreter? _interpreter;
@@ -183,7 +181,16 @@ class GeneralProvider extends ChangeNotifier {
     );
   }
 
-  Future<Map<String, dynamic>?> fetchUserData() async {
+  //theme mode
+  ThemeMode themeMode = ThemeMode.light;
+
+  void toggleTheme() {
+    themeMode = themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+
+  //-------------------get user from firebase-------------------
+  Future<Map<String, dynamic>?> getUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     final doc = await FirebaseFirestore.instance
@@ -191,13 +198,5 @@ class GeneralProvider extends ChangeNotifier {
         .doc(user.uid)
         .get();
     return doc.data();
-  }
-
-  //theme mode
-  ThemeMode themeMode = ThemeMode.light;
-
-  void toggleTheme() {
-    themeMode = themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    notifyListeners();
   }
 }

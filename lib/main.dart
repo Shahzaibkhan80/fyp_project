@@ -5,7 +5,6 @@ import 'package:fyp_project/routings/routeName/routes_name.dart';
 import 'package:fyp_project/routings/routeScreen/route_screen.dart';
 import 'package:fyp_project/view_modal/provider/multiAppProviders/multi_appProvider.dart';
 import 'package:provider/provider.dart';
-import 'utilis/themebutton/themebutton.dart';
 import 'view_modal/provider/generalProvider/general_provider.dart';
 
 void main() async {
@@ -32,16 +31,6 @@ class MyApp extends StatelessWidget {
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
             themeMode: generalProvider.themeMode,
-            builder: (context, child) {
-              final currentRoute = ModalRoute.of(context)?.settings.name;
-              return Stack(
-                children: [
-                  child!,
-                  if (currentRoute != RouteName.splashscreen)
-                    const ThemeToggleButton(), // Button har screen par except splash
-                ],
-              );
-            },
           );
         },
       ),

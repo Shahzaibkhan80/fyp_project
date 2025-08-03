@@ -4,7 +4,7 @@ import 'package:fyp_project/routings/routeName/routes_name.dart';
 import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:another_flushbar/flushbar.dart'; // Make sure this is imported
+import 'package:another_flushbar/flushbar.dart';
 
 import '../../view/auth/authServices/authservices.dart';
 import '../../view_modal/provider/textController/text_controller.dart';

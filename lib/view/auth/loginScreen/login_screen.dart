@@ -223,19 +223,6 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Floating theme toggle button at bottom right
-                  Positioned(
-                    bottom: 24,
-                    left: 24,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.blue,
-                      child: Icon(Icons.brightness_6, color: Colors.white),
-                      onPressed: () {
-                        Provider.of<GeneralProvider>(context, listen: false)
-                            .toggleTheme();
-                      },
-                    ),
-                  ),
                 ],
               );
             },
