@@ -41,7 +41,7 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Image upload functionality
+  //------------------Image upload functionality-----------------
   File? selectedImage;
 
   Future<void> pickImage() async {
@@ -74,6 +74,7 @@ class GeneralProvider extends ChangeNotifier {
     }
   }
 
+//----------------Model Prediction----------------
   Future<String> predictImage(BuildContext context) async {
     print('Prediction started...');
     if (selectedImage == null) {
@@ -139,6 +140,7 @@ class GeneralProvider extends ChangeNotifier {
     return "$label (${confidence.toStringAsFixed(2)}%)";
   }
 
+//----------------------Generate Report----------------------
   Future<void> generatePdf(
       BuildContext context, String predictionResult) async {
     final pdf = pw.Document();
@@ -171,20 +173,44 @@ class GeneralProvider extends ChangeNotifier {
     final file = File('${output.path}/prediction_report.pdf');
     await file.writeAsBytes(await pdf.save());
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('PDF Report saved: ${file.path}'),
-        action: SnackBarAction(
-          label: 'Open',
-          onPressed: () {
-            OpenFile.open(file.path);
-          },
+    // Show dialog with "Open" button
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('PDF Report Saved'),
+          content: Text('PDF saved at:\n${file.path}'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                CustomFlushBar.showSuccess(
+                  context,
+                  'PDF saved successfully',
+                );
+              },
+              child: const Text('Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                OpenFile.open(file.path);
+              },
+              child: const Text('Open'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
         ),
-      ),
-    );
+      );
+    }
   }
 
-  //theme mode
+  //-------------------theme mode---------------------------
   ThemeMode themeMode = ThemeMode.light;
 
   void toggleTheme() {

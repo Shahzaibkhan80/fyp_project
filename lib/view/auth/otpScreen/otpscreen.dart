@@ -26,7 +26,7 @@ class Otpscreen extends StatefulWidget {
 class _OtpscreenState extends State<Otpscreen> {
   late TextEditingController otpController;
   late String currentOtp;
-  bool otpVerified = false; // <-- Add this
+  bool otpVerified = false;
 
   @override
   void initState() {
@@ -34,7 +34,6 @@ class _OtpscreenState extends State<Otpscreen> {
     otpController = TextEditingController();
     currentOtp = widget.sentOtp;
 
-    // Post-frame callback me timer start karo
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final forgot = Provider.of<GeneralProvider>(context, listen: false);
       forgot.otpTimer?.cancel();
@@ -55,13 +54,19 @@ class _OtpscreenState extends State<Otpscreen> {
   @override
   Widget build(BuildContext context) {
     final forgot = Provider.of<GeneralProvider>(context, listen: true);
+    final height = MediaQuery.of(context).size.height;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subTextColor = isDark ? Colors.white70 : Colors.black54;
+    final cardColor = Theme.of(context).cardColor;
+    final bgColor = isDark ? Colors.black : Colors.white;
 
     final defaultPinTheme = PinTheme(
       width: 50,
       height: 50,
       textStyle: TextStyle(
         fontSize: 20,
-        color: AppColors.blackTextClr,
+        color: textColor,
         fontWeight: FontWeight.w600,
       ),
       decoration: BoxDecoration(
@@ -72,153 +77,194 @@ class _OtpscreenState extends State<Otpscreen> {
     );
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+      backgroundColor: bgColor,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 141, 176, 216),
+                  Color.fromARGB(255, 118, 167, 231),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomImage(
-                    imageUrl: AppImage.projectlogo,
-                    imageheight: 300,
-                    imagewidth: 250,
-                  ),
-                  SizedBox(
-                    width: 300,
-                    child: AppText(
-                      title: Appstrings.authVerificationScreenText,
-                      fontSize: 17,
-                      textAlign: TextAlign.center,
+                  const SizedBox(height: 60),
+                  Center(
+                    child: CustomImage(
+                      imageUrl: AppImage.projectlogo,
+                      imageheight: 130,
+                      imagewidth: 130,
                     ),
                   ),
-                  SizedBox(height: 40),
-                  Pinput(
-                    length: 4,
-                    controller: otpController,
-                    defaultPinTheme: defaultPinTheme,
-                    focusedPinTheme: defaultPinTheme.copyWith(
-                      decoration: defaultPinTheme.decoration?.copyWith(
-                        border: Border.all(
-                          color: AppColors.textbuttoncolor,
-                          width: 2,
+                  const SizedBox(height: 18),
+                  Container(
+                    width: double.infinity,
+                    height: height * 0.76,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 32),
+                    decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(36),
+                        topRight: Radius.circular(36),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12.withOpacity(0.08),
+                          blurRadius: 24,
+                          offset: const Offset(0, 8),
                         ),
-                      ),
+                      ],
                     ),
-                    separatorBuilder: (index) => SizedBox(width: 16),
-                  ),
-                  SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppText(
-                        title: Appstrings.authVerificationDontReceiveOtpText,
-                        fontSize: 16,
-                      ),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: (!otpVerified && forgot.otpExpired)
-                            ? () async {
-                                final newOtp = await forgot.sendOtpToEmail(
-                                    widget.email, "User");
-                                if (newOtp != null) {
-                                  setState(() {
-                                    currentOtp = newOtp;
-                                  });
-                                  forgot.otpTimer?.cancel();
-                                  forgot.otpSecondsLeft = 40;
-                                  forgot.otpExpired = false;
-                                  forgot.startOtpTimer();
-                                  CustomFlushBar.showSuccess(
-                                      context, 'OTP Sent Successfully!');
-                                } else {
-                                  CustomFlushBar.showError(
-                                      context, 'Failed to send OTP');
-                                }
-                              }
-                            : null,
-                        child: AppText(
-                          title: Appstrings.authVerificationResendText,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText(
+                          title: Appstrings.authVerificationScreenText,
+                          fontSize: 17,
+                          color: textColor,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+                        Pinput(
+                          length: 4,
+                          controller: otpController,
+                          defaultPinTheme: defaultPinTheme,
+                          focusedPinTheme: defaultPinTheme.copyWith(
+                            decoration: defaultPinTheme.decoration?.copyWith(
+                              border: Border.all(
+                                color: AppColors.textbuttoncolor,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          separatorBuilder: (index) =>
+                              const SizedBox(width: 16),
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppText(
+                              title:
+                                  Appstrings.authVerificationDontReceiveOtpText,
+                              fontSize: 16,
+                              color: subTextColor,
+                            ),
+                            const SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: (!otpVerified && forgot.otpExpired)
+                                  ? () async {
+                                      final newOtp = await forgot
+                                          .sendOtpToEmail(widget.email, "User");
+                                      if (newOtp != null) {
+                                        setState(() {
+                                          currentOtp = newOtp;
+                                        });
+                                        forgot.otpTimer?.cancel();
+                                        forgot.otpSecondsLeft = 40;
+                                        forgot.otpExpired = false;
+                                        forgot.startOtpTimer();
+                                        CustomFlushBar.showSuccess(
+                                            context, 'OTP Sent Successfully!');
+                                      } else {
+                                        CustomFlushBar.showError(
+                                            context, 'Failed to send OTP');
+                                      }
+                                    }
+                                  : null,
+                              child: AppText(
+                                title: Appstrings.authVerificationResendText,
+                                fontSize: 16,
+                                color: (!otpVerified && forgot.otpExpired)
+                                    ? AppColors.textbuttoncolor
+                                    : Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        AppText(
+                          title:
+                              '00:${forgot.otpSecondsLeft.toString().padLeft(2, '0')}',
                           fontSize: 16,
-                          color: (!otpVerified && forgot.otpExpired)
-                              ? AppColors.textbuttoncolor
-                              : Colors.grey,
+                          color: forgot.otpExpired
+                              ? Colors.red
+                              : AppColors.textbuttoncolor,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30),
-                  AppText(
-                    title:
-                        '00:${forgot.otpSecondsLeft.toString().padLeft(2, '0')}',
-                    fontSize: 16,
-                    color: forgot.otpExpired
-                        ? Colors.red
-                        : AppColors.textbuttoncolor,
-                  ),
-                  SizedBox(height: 30),
-                  AppButton(
-                    btnText: Appstrings.authVerificationButton,
-                    ontap: () async {
-                      if (forgot.otpExpired) {
-                        if (!mounted) return;
-                        CustomFlushBar.showError(
-                            context, 'OTP expired. Please request again.');
-                        return;
-                      }
-                      if (otpController.text == currentOtp) {
-                        setState(() {
-                          otpVerified = true;
-                        });
-                        forgot.stopOtpTimer();
+                        const SizedBox(height: 32),
+                        AppButton(
+                          btnText: Appstrings.authVerificationButton,
+                          ontap: () async {
+                            if (forgot.otpExpired) {
+                              if (!mounted) return;
+                              CustomFlushBar.showError(context,
+                                  'OTP expired. Please request again.');
+                              return;
+                            }
+                            if (otpController.text == currentOtp) {
+                              setState(() {
+                                otpVerified = true;
+                              });
+                              forgot.stopOtpTimer();
 
-                        if (!mounted) return;
-                        CustomFlushBar.showSuccess(
-                          context,
-                          'OTP Verified Successfully!',
-                        );
+                              if (!mounted) return;
+                              CustomFlushBar.showSuccess(
+                                context,
+                                'OTP Verified Successfully!',
+                              );
 
-                        final authService = Authservices();
-                        final result = await authService.sendPasswordResetEmail(
-                            email: widget.email);
+                              final authService = Authservices();
+                              final result = await authService
+                                  .sendPasswordResetEmail(email: widget.email);
 
-                        if (!mounted) return;
-                        if (result == null) {
-                          CustomFlushBar.showSuccess(context,
-                              'Password reset link sent to your email!');
-                        } else {
-                          CustomFlushBar.showError(
-                              context, 'Failed to send reset link: $result');
-                        }
+                              if (!mounted) return;
+                              if (result == null) {
+                                CustomFlushBar.showSuccess(context,
+                                    'Password reset link sent to your email!');
+                              } else {
+                                CustomFlushBar.showError(context,
+                                    'Failed to send reset link: $result');
+                              }
 
-                        await Future.delayed(const Duration(seconds: 2));
-                        if (!mounted) return;
-                        AppNavigators.nextscreen(
-                          context,
-                          RouteName.loginscreen,
-                        );
-                      } else {
-                        if (!mounted) return;
-                        CustomFlushBar.showError(context, 'Invalid OTP');
-                      }
-                    },
-                    color: AppColors.textbuttoncolor,
-                  ),
-                  if (forgot.otpExpired)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: AppText(
-                        title: 'OTP expired. Please request again.',
-                        fontSize: 14,
-                        color: Colors.red,
-                      ),
+                              await Future.delayed(const Duration(seconds: 2));
+                              if (!mounted) return;
+                              AppNavigators.nextscreen(
+                                context,
+                                RouteName.loginscreen,
+                              );
+                            } else {
+                              if (!mounted) return;
+                              CustomFlushBar.showError(context, 'Invalid OTP');
+                            }
+                          },
+                          color: AppColors.textbuttoncolor,
+                        ),
+                        if (forgot.otpExpired)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: AppText(
+                              title: 'OTP expired. Please request again.',
+                              fontSize: 14,
+                              color: Colors.red,
+                            ),
+                          ),
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

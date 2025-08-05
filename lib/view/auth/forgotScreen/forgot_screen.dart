@@ -20,16 +20,21 @@ class ForgotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subTextColor = isDark ? Colors.white70 : Colors.black54;
+    final cardColor = Theme.of(context).cardColor;
+    final bgColor = isDark ? Colors.black : Colors.white;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: bgColor,
       body: WillPopScope(
         onWillPop: () async {
           TextController.forgotemailController.clear();
-          return true; // allow pop
+          return true;
         },
         child: Stack(
           children: [
-            // Softer gradient background for better logo visibility
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -63,7 +68,7 @@ class ForgotScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 32),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: cardColor,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(36),
                             topRight: Radius.circular(36),
@@ -81,18 +86,18 @@ class ForgotScreen extends StatelessWidget {
                           children: [
                             Text(
                               Appstrings.authForgotPassword,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
-                                color: Colors.black87,
+                                color: textColor,
                               ),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               Appstrings.authForgotScreenText,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.black54,
+                                color: subTextColor,
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -114,7 +119,6 @@ class ForgotScreen extends StatelessWidget {
                                   return;
                                 }
 
-                                // Firestore se naam fetch karo
                                 final userQuery = await FirebaseFirestore
                                     .instance
                                     .collection('users')
