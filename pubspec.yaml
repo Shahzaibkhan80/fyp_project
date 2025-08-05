@@ -50,6 +50,8 @@ dependencies:
   open_file: ^3.5.10
   another_flushbar: ^1.12.30
   http: ^1.2.1
+  flutter_dotenv: ^5.1.0
+  mailer: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +86,7 @@ flutter:
     - assets/images/
     - assets/braintumor.tflite
     - assets/fonts/Raleway-MediumItalic.ttf
+    - .env  # Yeh line add karein
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

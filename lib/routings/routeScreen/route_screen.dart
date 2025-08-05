@@ -16,7 +16,10 @@ class RouteScreen {
       RouteName.regscreen: (context) => RegisterScreen(),
       RouteName.forgotscreen: (context) => ForgotScreen(),
       RouteName.uploadimage: (context) => UploadImage(),
-      RouteName.otpscreen: (context) => Otpscreen(),
+      RouteName.otpscreen: (context) => Otpscreen(
+            sentOtp: '',
+            email: '',
+          ),
       RouteName.confirmpasswordscreen: (context) => Confirmpasswordscreen(),
     };
   }

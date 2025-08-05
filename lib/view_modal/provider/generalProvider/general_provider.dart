@@ -2,18 +2,21 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:image/image.dart' as img; // <-- Only this for image ops
+import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:open_file/open_file.dart';
-
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import '../../../utilis/customFlushbar/customFlashbar.dart';
 
 class GeneralProvider extends ChangeNotifier {
@@ -198,5 +201,85 @@ class GeneralProvider extends ChangeNotifier {
         .doc(user.uid)
         .get();
     return doc.data();
+  }
+
+  //------------------------otp work----------------------------
+  Future<String?> sendOtpToEmail(String email, String name) async {
+    try {
+      bool exists = await checkEmailExists(email);
+      if (!exists) {
+        return null;
+      }
+
+      final otp = (Random().nextInt(9000) + 1000).toString();
+
+      print('Creating SMTP server with: ${dotenv.env['SMTP_EMAIL']}');
+      final smtpServer = gmail(
+        dotenv.env['SMTP_EMAIL']!,
+        dotenv.env['SMTP_PASSWORD']!,
+      );
+
+      final message = Message()
+        ..from = Address(dotenv.env['SMTP_EMAIL']!, 'OncoDetect')
+        ..recipients.add(email)
+        ..subject = 'Your One-Time Password (OTP) for OncoDetect'
+        ..text = '''
+Dear $name,
+
+Your OTP code is: $otp
+
+Please enter this code in the app to verify your email address.
+This code is valid for a limited time and should not be shared with anyone.
+
+Thank you,
+The OncoDetect Team
+''';
+
+      print('Attempting to send email...');
+      await send(message, smtpServer);
+      print('Email sent successfully!');
+      return otp;
+    } catch (e) {
+      print('Email send error: $e');
+      return null;
+    }
+  }
+
+  // OTP Timer
+  int otpSecondsLeft = 40;
+  bool otpExpired = false;
+  Timer? otpTimer;
+
+  void startOtpTimer() {
+    otpSecondsLeft = 40; // 40 seconds
+    otpExpired = false;
+    otpTimer?.cancel();
+    otpTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (otpSecondsLeft > 1) {
+        otpSecondsLeft--;
+        notifyListeners();
+      } else {
+        otpSecondsLeft = 0;
+        otpExpired = true;
+        notifyListeners();
+        otpTimer?.cancel();
+      }
+    });
+    notifyListeners();
+  }
+
+  void stopOtpTimer() {
+    otpTimer?.cancel();
+    otpExpired = true;
+    notifyListeners();
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    final result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    return result.docs.isNotEmpty;
   }
 }

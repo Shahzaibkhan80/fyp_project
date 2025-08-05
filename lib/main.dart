@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fyp_project/firebase_options.dart';
 import 'package:fyp_project/routings/routeName/routes_name.dart';
 import 'package:fyp_project/routings/routeScreen/route_screen.dart';
@@ -12,6 +13,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await dotenv.load();
+
   runApp(const MyApp());
 }
 

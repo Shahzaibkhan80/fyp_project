@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appButton/app_button.dart';
 import 'package:fyp_project/constant/appImages/app_image.dart';
@@ -10,8 +11,10 @@ import 'package:provider/provider.dart';
 
 import '../../../constant/appColors/app_color.dart';
 import '../../../constant/appIcons/app_Icon.dart';
+import '../../../utilis/customFlushbar/customFlashbar.dart';
 import '../../../view_modal/provider/textController/text_controller.dart';
 import '../authServices/authservices.dart';
+import '../otpScreen/otpscreen.dart';
 
 class ForgotScreen extends StatelessWidget {
   const ForgotScreen({super.key});
@@ -108,25 +111,40 @@ class ForgotScreen extends StatelessWidget {
                                     .forgotemailController.text
                                     .trim();
                                 if (email.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Please enter your email')),
-                                  );
+                                  CustomFlushBar.showError(
+                                      context, 'Please enter your email');
                                   return;
                                 }
-                                final result = await Authservices()
-                                    .sendPasswordResetEmail(email: email);
-                                if (result == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Reset link sent to your email')),
+
+                                // Firestore se naam fetch karo
+                                final userQuery = await FirebaseFirestore
+                                    .instance
+                                    .collection('users')
+                                    .where('email', isEqualTo: email)
+                                    .limit(1)
+                                    .get();
+
+                                String name = 'User';
+                                if (userQuery.docs.isNotEmpty) {
+                                  name = userQuery.docs.first['name'] ?? 'User';
+                                }
+
+                                print('Send OTP');
+                                final otp =
+                                    await forgot.sendOtpToEmail(email, name);
+                                if (otp != null) {
+                                  CustomFlushBar.showSuccess(
+                                      context, 'OTP sent to your email!');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Otpscreen(sentOtp: otp, email: email),
+                                    ),
                                   );
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(result)),
-                                  );
+                                  CustomFlushBar.showError(
+                                      context, 'Failed to send OTP');
                                 }
                               },
                               color: AppColors.textbuttoncolor,
