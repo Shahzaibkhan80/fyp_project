@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appButton/app_button.dart';
 import 'package:fyp_project/constant/appImages/app_image.dart';
 import 'package:fyp_project/constant/appStrings/app_string.dart';
-import 'package:fyp_project/constant/appText/app_text.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 import 'package:fyp_project/widgets/customImage/custom_image.dart';
@@ -13,7 +12,6 @@ import '../../../constant/appColors/app_color.dart';
 import '../../../constant/appIcons/app_Icon.dart';
 import '../../../utilis/customFlushbar/customFlashbar.dart';
 import '../../../view_modal/provider/textController/text_controller.dart';
-import '../authServices/authservices.dart';
 import '../otpScreen/otpscreen.dart';
 
 class ForgotScreen extends StatelessWidget {
@@ -126,10 +124,17 @@ class ForgotScreen extends StatelessWidget {
 
                                 String name = 'User';
                                 if (userQuery.docs.isNotEmpty) {
-                                  name = userQuery.docs.first['name'] ?? 'User';
+                                  final data = userQuery.docs.first.data();
+                                  name = (data.containsKey('name') &&
+                                          data['name'] != null &&
+                                          data['name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                      ? data['name']
+                                      : 'User';
                                 }
 
-                                print('Send OTP');
                                 final otp =
                                     await forgot.sendOtpToEmail(email, name);
                                 if (otp != null) {
@@ -142,6 +147,7 @@ class ForgotScreen extends StatelessWidget {
                                           Otpscreen(sentOtp: otp, email: email),
                                     ),
                                   );
+                                  TextController.forgotemailController.clear();
                                 } else {
                                   CustomFlushBar.showError(
                                       context, 'Failed to send OTP');

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_project/constant/appIcons/app_icon.dart';
 import 'package:fyp_project/constant/appImages/app_image.dart';
 import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
-import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart'; // Import FlushBar
+import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart';
 import 'package:fyp_project/view_modal/provider/textController/text_controller.dart';
 import 'package:fyp_project/view_modal/validation/validation.dart';
 import 'package:fyp_project/widgets/customImage/custom_image.dart';

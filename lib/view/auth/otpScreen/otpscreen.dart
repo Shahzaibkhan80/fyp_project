@@ -12,6 +12,7 @@ import '../../../constant/appImages/app_image.dart';
 import '../../../utilis/customFlushbar/customFlashbar.dart';
 import '../../../view_modal/provider/generalProvider/general_provider.dart';
 import '../../../widgets/customImage/custom_image.dart';
+import '../authServices/authservices.dart';
 
 class Otpscreen extends StatefulWidget {
   final String sentOtp;
@@ -46,6 +47,8 @@ class _OtpscreenState extends State<Otpscreen> {
   @override
   void dispose() {
     otpController.dispose();
+    final forgot = Provider.of<GeneralProvider>(context, listen: false);
+    forgot.stopOtpTimer();
     super.dispose();
   }
 
@@ -159,6 +162,7 @@ class _OtpscreenState extends State<Otpscreen> {
                     btnText: Appstrings.authVerificationButton,
                     ontap: () async {
                       if (forgot.otpExpired) {
+                        if (!mounted) return;
                         CustomFlushBar.showError(
                             context, 'OTP expired. Please request again.');
                         return;
@@ -169,17 +173,33 @@ class _OtpscreenState extends State<Otpscreen> {
                         });
                         forgot.stopOtpTimer();
 
+                        if (!mounted) return;
                         CustomFlushBar.showSuccess(
                           context,
                           'OTP Verified Successfully!',
                         );
 
+                        final authService = Authservices();
+                        final result = await authService.sendPasswordResetEmail(
+                            email: widget.email);
+
+                        if (!mounted) return;
+                        if (result == null) {
+                          CustomFlushBar.showSuccess(context,
+                              'Password reset link sent to your email!');
+                        } else {
+                          CustomFlushBar.showError(
+                              context, 'Failed to send reset link: $result');
+                        }
+
                         await Future.delayed(const Duration(seconds: 2));
+                        if (!mounted) return;
                         AppNavigators.nextscreen(
                           context,
-                          RouteName.confirmpasswordscreen,
+                          RouteName.loginscreen,
                         );
                       } else {
+                        if (!mounted) return;
                         CustomFlushBar.showError(context, 'Invalid OTP');
                       }
                     },
