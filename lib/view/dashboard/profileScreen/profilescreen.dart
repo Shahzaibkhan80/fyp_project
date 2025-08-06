@@ -6,6 +6,8 @@ import '../../../routings/routeName/routes_name.dart';
 import '../../../widgets/customProfile/profileHeader/profileheader.dart';
 import '../../../widgets/customProfile/profileList/profilelist.dart';
 import '../../../view_modal/provider/generalProvider/general_provider.dart';
+import '../contactUs/contactUsScreen.dart';
+import '../termsAndcondition/termsAndcondition.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -69,19 +71,37 @@ class ProfileScreen extends StatelessWidget {
                   icon: Icons.lock_outline,
                   color: Colors.blue,
                   title: 'Change Password',
-                  onTap: () {},
+                  onTap: () {
+                    AppNavigators.changescreen(
+                      context,
+                      RouteName.confirmpasswordscreen,
+                    );
+                  },
                 ),
                 ProfileListTile(
                   icon: Icons.email_outlined,
                   color: Colors.green,
                   title: 'Contact us',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ContactUsScreen()),
+                    );
+                  },
                 ),
                 ProfileListTile(
                   icon: Icons.description_outlined,
                   color: Colors.indigo,
                   title: 'Terms & Conditions',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const TermsAndConditionsScreen()),
+                    );
+                  },
                 ),
                 ProfileListTile(
                   icon: Icons.logout,

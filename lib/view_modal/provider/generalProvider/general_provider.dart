@@ -41,6 +41,19 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isOldVisible = false;
+  bool isNewVisible = false;
+
+  void toggleOldVisible() {
+    isOldVisible = !isOldVisible;
+    notifyListeners();
+  }
+
+  void toggleNewVisible() {
+    isNewVisible = !isNewVisible;
+    notifyListeners();
+  }
+
   //------------------Image upload functionality-----------------
   File? selectedImage;
 

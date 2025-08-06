@@ -7,11 +7,10 @@ import 'package:fyp_project/constant/appTextfield/app_textfield.dart';
 import 'package:fyp_project/view_modal/provider/textController/text_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import '../../../utilis/customFlushbar/customFlashbar.dart';
 import '../../../constant/appImages/app_image.dart';
 import '../../../view_modal/provider/generalProvider/general_provider.dart';
-import '../../../widgets/customImage/custom_image.dart';
 import 'package:fyp_project/view_modal/validation/validation.dart';
+import '../../../utilis/customFlushbar/customFlashbar.dart';
 
 class Confirmpasswordscreen extends StatelessWidget {
   const Confirmpasswordscreen({super.key});
@@ -26,7 +25,7 @@ class Confirmpasswordscreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: bgColor, // <-- yahan bgColor use karo
+        backgroundColor: bgColor,
         body: WillPopScope(
           onWillPop: () async {
             TextController.loginemailController.clear();
@@ -37,7 +36,6 @@ class Confirmpasswordscreen extends StatelessWidget {
             builder: (context, cf, child) {
               return Stack(
                 children: [
-                  // Blue gradient background
                   Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -68,7 +66,7 @@ class Confirmpasswordscreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 32),
                           decoration: BoxDecoration(
-                            color: cardColor, // Theme card color
+                            color: cardColor,
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(36),
                               topRight: Radius.circular(36),
@@ -84,36 +82,65 @@ class Confirmpasswordscreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               AppText(
                                 title: Appstrings.authConfirmPasswordScreenText,
                                 color: textColor,
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               AppTextfield(
-                                hintText:
-                                    Appstrings.authConfirmPasswordNewPassword,
+                                hintText: "Enter Old Password",
                                 controller: TextController.confirmController,
+                                obscureText: !cf.isOldVisible,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    cf.isOldVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    cf.toggleOldVisible();
+                                  },
+                                ),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               AppTextfield(
-                                hintText: Appstrings.authCreateNewPasswordText,
+                                hintText: "Enter New Password",
                                 controller: TextController.confirmnewController,
+                                obscureText: !cf.isNewVisible,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    cf.isNewVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    cf.toggleNewVisible();
+                                  },
+                                ),
                               ),
-                              SizedBox(height: 40),
+                              const SizedBox(height: 40),
                               AppButton(
                                 btnText:
                                     Appstrings.authConfirmPasswordSaveButton,
                                 color: AppColors.textbuttoncolor,
                                 ontap: () async {
-                                  final newPassword = TextController
+                                  final oldPassword = TextController
                                       .confirmController.text
                                       .trim();
-                                  final confirmPassword = TextController
+                                  final newPassword = TextController
                                       .confirmnewController.text
                                       .trim();
 
-                                  // Validators ka use
+                                  // Validation
+                                  if (oldPassword.isEmpty ||
+                                      newPassword.isEmpty) {
+                                    CustomFlushBar.showError(
+                                        context, "Please fill all fields");
+                                    return;
+                                  }
                                   final passwordError =
                                       Validators.validatePassword(newPassword);
                                   if (passwordError != null) {
@@ -121,16 +148,26 @@ class Confirmpasswordscreen extends StatelessWidget {
                                         context, passwordError);
                                     return;
                                   }
-                                  if (newPassword != confirmPassword) {
-                                    CustomFlushBar.showError(
-                                        context, 'Passwords do not match');
+                                  if (oldPassword == newPassword) {
+                                    CustomFlushBar.showError(context,
+                                        "New password must be different from old password");
                                     return;
                                   }
 
                                   try {
                                     final user =
                                         FirebaseAuth.instance.currentUser;
-                                    if (user != null) {
+                                    final email = user?.email;
+                                    if (user != null && email != null) {
+                                      // Re-authenticate user
+                                      final cred = EmailAuthProvider.credential(
+                                        email: email,
+                                        password: oldPassword,
+                                      );
+                                      await user
+                                          .reauthenticateWithCredential(cred);
+
+                                      // Update password
                                       await user.updatePassword(newPassword);
                                       CustomFlushBar.showSuccess(context,
                                           'Password updated successfully!');
@@ -143,8 +180,8 @@ class Confirmpasswordscreen extends StatelessWidget {
                                           context, 'No user found');
                                     }
                                   } catch (e) {
-                                    CustomFlushBar.showError(
-                                        context, 'Failed to update password');
+                                    CustomFlushBar.showError(context,
+                                        'Old password is incorrect or update failed');
                                   }
                                 },
                               ),
