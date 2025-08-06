@@ -67,8 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 32),
                         decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).cardColor, // Theme based color
+                          color: Theme.of(context).cardColor,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(36),
                             topRight: Radius.circular(36),
@@ -163,7 +162,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (formkey.currentState!.validate()) {
                                     if (reg.selectgender == null ||
                                         reg.selectgender!.isEmpty) {
-                                      print('Gender not selected');
                                       CustomFlushBar.showInfo(
                                           context, "Please select your gender");
                                       return;
@@ -175,25 +173,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         .regnameController.text
                                         .trim();
 
-                                    try {
-                                      // Pehle Firebase registration karo
-                                      await AppAuth(context).register();
+                                    final result =
+                                        await AppAuth(context).register();
 
-                                      // Agar yahan tak pohanch gaye, toh registration success hai
+                                    if (result == null) {
+                                      // Registration success
+                                      CustomFlushBar.showSuccess(
+                                          context, "Registration successful!");
                                       await N8nWebhookService
                                           .sendRegistrationToWebhook(
                                         email: email,
                                         name: name,
                                       );
-
-                                      print('Webhook called: $email, $name');
-                                    } catch (e) {
-                                      print('Error in try block: $e');
-                                      CustomFlushBar.showError(
-                                          context, "Error: ${e.toString()}");
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
+                                      if (context.mounted) {
+                                        AppNavigators.changescreen(
+                                            context, RouteName.uploadimage);
+                                      }
+                                    } else {
+                                      // Registration failed
+                                      CustomFlushBar.showError(context, result);
                                     }
                                   } else {
-                                    print('Form validation failed');
                                     CustomFlushBar.showInfo(context,
                                         "Please correct the errors in the form");
                                   }
