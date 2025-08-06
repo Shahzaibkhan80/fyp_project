@@ -160,20 +160,24 @@ class LoginScreen extends StatelessWidget {
                                     AppButton(
                                       btnText: Appstrings.authLoginButton,
                                       color: const Color(0xFF1565C0),
-                                      ontap: () {
+                                      ontap: () async {
                                         if (formkey.currentState!.validate()) {
-                                          try {
-                                            AppAuth(context).login();
-                                            // Show success notification
+                                          final result =
+                                              await AppAuth(context).login();
+                                          if (result == null) {
                                             CustomFlushBar.showSuccess(
                                                 context, "Login successful!");
-                                          } catch (e) {
-                                            // Show error notification
-                                            CustomFlushBar.showError(context,
-                                                "Login failed: ${e.toString()}");
+                                            await Future.delayed(
+                                                const Duration(seconds: 2));
+                                            if (context.mounted) {
+                                              AppNavigators.nextscreen(context,
+                                                  RouteName.uploadimage);
+                                            }
+                                          } else {
+                                            CustomFlushBar.showError(
+                                                context, result);
                                           }
                                         } else {
-                                          // Show validation error notification
                                           CustomFlushBar.showInfo(context,
                                               "Please correct the form errors.");
                                         }
@@ -191,8 +195,7 @@ class LoginScreen extends StatelessWidget {
                                     child: Text(
                                       Appstrings.authDontHaveAccount,
                                       style: TextStyle(
-                                        color: Theme.of(context)
-                                            .hintColor, // Colors.grey ki jagah
+                                        color: Theme.of(context).hintColor,
                                         fontSize: 15,
                                       ),
                                     ),

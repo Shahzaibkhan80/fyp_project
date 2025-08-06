@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_project/navigationScreen/appNavigation.dart';
-import 'package:fyp_project/routings/routeName/routes_name.dart';
-import 'package:fyp_project/utilis/customFlushbar/customFlashbar.dart';
+
 import 'package:fyp_project/view_modal/provider/generalProvider/general_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:another_flushbar/flushbar.dart';
 
 import '../../view/auth/authServices/authservices.dart';
 import '../../view_modal/provider/textController/text_controller.dart';
@@ -14,7 +11,7 @@ class AppAuth {
 
   AppAuth(this.context);
 
-  Future<bool> register() async {
+  Future<String?> register() async {
     final reg = Provider.of<GeneralProvider>(context, listen: false);
     final name = TextController.regnameController.text.trim();
     final email = TextController.regemailController.text.trim();
@@ -29,8 +26,7 @@ class AppAuth {
         contactNo.isEmpty ||
         age.isEmpty ||
         gender == null) {
-      CustomFlushBar.showInfo(context, "Please fill all the fields");
-      throw Exception("Please fill all the fields");
+      return "Please fill all the fields";
     }
 
     final authregService = Authservices();
@@ -52,39 +48,18 @@ class AppAuth {
       TextController.regContactNoController.clear();
       TextController.regAgeController.clear();
       reg.selectgender = null;
-
-      CustomFlushBar.showSuccess(context, "Registration successful!");
-
-      await Future.delayed(Duration(seconds: 3));
-
-      if (context.mounted) {
-        AppNavigators.nextscreen(context, RouteName.uploadimage);
-      }
-
-      return true;
+      return null;
     } else {
-      CustomFlushBar.showError(context, error);
-      throw Exception(error);
+      return error;
     }
   }
 
-  Future<bool> login() async {
-    // Similar implementation for login...
+  Future<String?> login() async {
     final email = TextController.loginemailController.text.trim();
     final password = TextController.loginpassController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      // Direct implementation
-      if (context.mounted) {
-        Flushbar(
-          message: "Please fill all the fields",
-          icon: Icon(Icons.info_outline, color: Colors.white),
-          backgroundColor: Colors.blue,
-          duration: Duration(seconds: 3),
-          flushbarPosition: FlushbarPosition.TOP,
-        ).show(context);
-      }
-      return false;
+      return "Please fill all the fields";
     }
 
     final authloginService = Authservices();
@@ -92,21 +67,11 @@ class AppAuth {
         await authloginService.loginUser(email: email, password: password);
 
     if (error == null) {
-      CustomFlushBar.showSuccess(context, "Login successful");
       TextController.loginemailController.clear();
       TextController.loginpassController.clear();
-
-      // Wait for FlushBar to be visible
-      await Future.delayed(Duration(seconds: 4));
-
-      // Navigate to next screen
-      if (context.mounted) {
-        AppNavigators.nextscreen(context, RouteName.uploadimage);
-      }
-      return true;
+      return null;
     } else {
-      CustomFlushBar.showError(context, error);
-      return false;
+      return error;
     }
   }
 }
